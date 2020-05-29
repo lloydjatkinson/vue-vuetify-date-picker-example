@@ -146,18 +146,26 @@
                         <VBtn
                             :disabled="!formsAreValid"
                             block
-                            color="primary">
+                            color="primary"
+                            @click="send">
                             Send
                         </VBtn>
                     </VCardActions>
                 </VCard>
             </VCol>
         </VRow>
+        <ContactFormSendDialog
+            :main-form="mainForm"
+            :miscelanous-form="miscelanousForm"
+            :show="readyToSend"
+            @sent="contactFormSubmitted" />
     </VContainer>
 </template>
 
 <script>
 import ContactFormDateCompare from './ContactFormDateCompare';
+import ContactFormSendDialog from './ContactFormSendDialog';
+
 import {
     nameRequired, nameLength, emailRequired, emailIsValid, favouriteWordsRequired,
 } from './contact-form-validation';
@@ -167,6 +175,7 @@ export default {
 
     components: {
         ContactFormDateCompare,
+        ContactFormSendDialog,
     },
 
     data () {
@@ -188,7 +197,18 @@ export default {
                 favouriteWords: [],
                 favouriteWordsRules: [favouriteWordsRequired],
             },
+            readyToSend: false,
         };
+    },
+
+    methods: {
+        send () {
+            this.readyToSend = true;
+        },
+
+        contactFormSubmitted () {
+            this.readyToSend = false;
+        },
     },
 };
 </script>
